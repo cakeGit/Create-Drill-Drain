@@ -32,64 +32,73 @@ public class DrillBlockMixin implements DrillBlockMixinAccess {
     }
 
     @Unique
-    public void create_Drill_Drain$searchForDrillPumpSource(LevelAccessor world, BlockPos pos, Block block) {
-        if (!(world.getBlockEntity(pos) instanceof DrillBlockEntity drillBlockEntity)) return;
-        BlockPos existing = ((DrillBlockEntityMixinAccess) drillBlockEntity).create_Drill_Drain$getDrillDrainParent();
-        BlockState thisState = world.getBlockState(pos);
-        if (existing != null) {
-            BlockState state = world.getBlockState(existing);
-            if (state.getBlock() instanceof DrillDrainBlock &&
-                state.getValue(DrillDrainBlock.FACING) == thisState.getValue(DirectionalBlock.FACING)) {
+    public void create_Drill_Drain$searchForDrillPumpSource(LevelAccessor world, BlockPos thisPos, Block block) {
+        if (!(world.getBlockEntity(thisPos) instanceof DrillBlockEntity drillBlockEntity)) return;
+        BlockPos existingDrillDrainPos = ((DrillBlockEntityMixinAccess) drillBlockEntity).create_Drill_Drain$getDrillDrainParent();
+        BlockState thisState = world.getBlockState(thisPos);
+        if (existingDrillDrainPos != null) {
+            BlockState existingDrillDrainState = world.getBlockState(existingDrillDrainPos);
+            if (isValidConnection(existingDrillDrainState, thisState, existingDrillDrainPos, thisPos)) {
                 //Look for orphaned drills around to share the drain with
                 for (Direction dir : Direction.values()) {
                     if (dir.getAxis() == thisState.getValue(DirectionalBlock.FACING).getAxis()) continue;
-                    BlockPos neighbor = pos.relative(dir);
+                    BlockPos neighbor = thisPos.relative(dir);
                     BlockState neighborState = world.getBlockState(neighbor);
                     if (neighborState.getBlock() instanceof DrillBlock &&
                         neighborState.getValue(DirectionalBlock.FACING) == thisState.getValue(DirectionalBlock.FACING)) {
                         BlockEntity blockEntity = world.getBlockEntity(neighbor);
                         if (blockEntity instanceof DrillBlockEntity otherDrillBlockEntity) {
                             @Nullable BlockPos parent = ((DrillBlockEntityMixinAccess) otherDrillBlockEntity).create_Drill_Drain$getDrillDrainParent();
-                            if (parent == null && neighbor.distManhattan(existing) < 4) {
-                                ((DrillBlockEntityMixinAccess) otherDrillBlockEntity).create_Drill_Drain$setDrillDrainParent(existing);
+                            if (parent == null && neighbor.distManhattan(existingDrillDrainPos) < 4) {
+                                ((DrillBlockEntityMixinAccess) otherDrillBlockEntity).create_Drill_Drain$setDrillDrainParent(existingDrillDrainPos);
                                 world.blockUpdated(neighbor, block);
                             }
                         }
                     }
                 }
-
                 return;
             }
             ((DrillBlockEntityMixinAccess) drillBlockEntity).create_Drill_Drain$setDrillDrainParent(null);
-            world.blockUpdated(pos, block);
+            world.blockUpdated(thisPos, block);
+            return;
         }
 
+        //Search for a drill drain to connect to
         ((DrillBlockEntityMixinAccess) drillBlockEntity).create_Drill_Drain$setDrillDrainParent(null);
         for (Direction dir : Direction.values()) {
-            BlockPos neighbor = pos.relative(dir);
+            BlockPos neighbor = thisPos.relative(dir);
             BlockState neighborState = world.getBlockState(neighbor);
+            
+            //Look for a potential drain
             if (dir.getAxis() == thisState.getValue(DirectionalBlock.FACING).getAxis()) {
-                if (neighborState.getBlock() instanceof DrillDrainBlock &&
-                    neighborState.getValue(DrillDrainBlock.FACING) == thisState.getValue(DirectionalBlock.FACING)) {
+                if (dir == thisState.getValue(DirectionalBlock.FACING).getOpposite() && isValidConnection(neighborState, thisState, neighbor, thisPos)) {
                     ((DrillBlockEntityMixinAccess) drillBlockEntity).create_Drill_Drain$setDrillDrainParent(neighbor);
-                    world.blockUpdated(pos, block);
+                    world.blockUpdated(thisPos, block);
                     break;
                 }
                 continue;
             }
+            
+            //Look for a drill that has a parent
             if (neighborState.getBlock() instanceof DrillBlock) {
                 //Get the block entity and see if the drill has a parent
                 BlockEntity blockEntity = world.getBlockEntity(neighbor);
                 if (blockEntity instanceof DrillBlockEntity otherDrillBlockEntity) {
                     @Nullable BlockPos parent = ((DrillBlockEntityMixinAccess) otherDrillBlockEntity).create_Drill_Drain$getDrillDrainParent();
-                    if (parent != null && parent.distManhattan(pos) < 4) {
+                    if (parent != null && isValidConnection(world.getBlockState(parent), thisState, neighbor, thisPos)) {
                         ((DrillBlockEntityMixinAccess) drillBlockEntity).create_Drill_Drain$setDrillDrainParent(parent);
-                        world.blockUpdated(pos, block);
+                        world.blockUpdated(thisPos, block);
                         break;
                     }
                 }
             }
         }
+    }
+
+    private boolean isValidConnection(BlockState drainState, BlockState thisState, BlockPos drainPos, BlockPos thisPos) {
+        return drainState.getBlock() instanceof DrillDrainBlock &&
+            drainState.getValue(DrillDrainBlock.FACING) == thisState.getValue(DirectionalBlock.FACING) &&
+            drainPos.distManhattan(thisPos) < 4;
     }
 
 }
