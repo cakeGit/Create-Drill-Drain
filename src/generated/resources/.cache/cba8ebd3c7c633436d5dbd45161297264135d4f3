@@ -1,0 +1,8 @@
+// 1.21.1	2025-06-04T18:14:35.5009912	Registrate Provider for drill_drain [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (enchantments), Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+0dab31e70d33c7028c8151ea99fa264e557cbd79 assets/drill_drain/blockstates/drill_drain.json
+6b57d113414d9ecd812557847b62027965c5cae4 assets/drill_drain/lang/en_ud.json
+ec34068a791e26add0aac1336c4bdc154c1c387f assets/drill_drain/lang/en_us.json
+2f186eb3caa5772c6e296540ee27a9f482731a77 assets/drill_drain/models/item/drill_drain.json
+3910219e90721027f78845ea5d328ebb728ef7d0 data/drill_drain/loot_table/blocks/drill_drain.json
+8ca95a5aae4b89d447f612830cb5f5cc721d01b9 data/minecraft/tags/block/mineable/axe.json
+8ca95a5aae4b89d447f612830cb5f5cc721d01b9 data/minecraft/tags/block/mineable/pickaxe.json

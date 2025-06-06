@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "drill_drain:block/drill_drain",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "drill_drain:block/drill_drain",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "drill_drain:block/drill_drain",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "drill_drain:block/drill_drain",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "drill_drain:block/drill_drain"
+    },
+    "facing=west": {
+      "model": "drill_drain:block/drill_drain",
+      "x": 90,
+      "y": 270
+    }
+  }
+}
