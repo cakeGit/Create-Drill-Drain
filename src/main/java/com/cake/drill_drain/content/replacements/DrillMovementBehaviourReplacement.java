@@ -1,27 +1,21 @@
 package com.cake.drill_drain.content.replacements;
 
-import com.simibubi.create.AllFluids;
-import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
-import com.simibubi.create.content.fluids.OpenEndedPipe;
-import com.simibubi.create.content.fluids.pipes.VanillaFluidTargets;
+import com.simibubi.create.content.contraptions.render.ActorVisual;
 import com.simibubi.create.content.kinetics.drill.DrillMovementBehaviour;
-import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.fluid.FluidHelper;
-import com.simibubi.create.foundation.mixin.accessor.FlowingFluidAccessor;
-import net.minecraft.client.resources.sounds.Sound;
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
+import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+
+import javax.annotation.Nullable;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
@@ -30,7 +24,7 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
     @Override
     public void visitNewPosition(MovementContext context, BlockPos pos) {
         super.visitNewPosition(context, pos);
-        if (context.blockEntityData.contains("DrillDrainParent") ) {
+        if (context.blockEntityData.contains("DrillDrainParent") && !context.world.isClientSide) {
             FluidStack currentState = getFluidFromFluidBlock(context, pos, true);
 
             if (currentState.isEmpty()) {
@@ -74,8 +68,16 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
             context.world.scheduleTick(pos, Fluids.WATER, 1);
         } else {
             context.world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            context.world.scheduleTick(pos, fluidState.getType(), 1);
         }
 
         return stack;
     }
+
+    @Nullable
+    @Override
+    public ActorVisual createVisual(VisualizationContext visualizationContext, VirtualRenderWorld simulationWorld, MovementContext movementContext) {
+        return new DrillActorVisualReplacement(visualizationContext, simulationWorld, movementContext);
+    }
+
 }
