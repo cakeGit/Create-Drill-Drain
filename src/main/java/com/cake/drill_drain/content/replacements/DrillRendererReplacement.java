@@ -1,4 +1,4 @@
-package com.cake.drill_drain.content;
+package com.cake.drill_drain.content.replacements;
 
 import com.cake.drill_drain.accessor.DrillBlockEntityMixinAccess;
 import com.cake.drill_drain.foundation.DDPartialModels;

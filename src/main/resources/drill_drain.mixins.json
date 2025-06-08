@@ -9,7 +9,8 @@
     "BlockEntityBuilderMixin",
     "CreateCreativeModeTabMixin",
     "DrillBlockEntityMixin",
-    "DrillBlockMixin"
+    "DrillBlockMixin",
+    "MovementBehaviourMixin"
   ],
   "client": [
   ],
