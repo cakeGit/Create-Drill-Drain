@@ -9,6 +9,6 @@
 
 [ ] Shift-info
 
-[1/2] Logo and assets
+[1.5/2] Logo and assets
 
 [ ] Documentation and description
