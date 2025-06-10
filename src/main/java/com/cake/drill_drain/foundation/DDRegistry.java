@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -29,6 +30,7 @@ public class DDRegistry {
         .blockstate(BlockStateGen.directionalBlockProvider(false))
         .transform(axeOrPickaxe())
         .simpleItem()
+        .addLayer(() -> RenderType::cutoutMipped)
         .register();
 
     public static final BlockEntityEntry<DrillDrainBlockEntity> DRILL_DRAIN_BLOCK_ENTITY = REGISTRATE
