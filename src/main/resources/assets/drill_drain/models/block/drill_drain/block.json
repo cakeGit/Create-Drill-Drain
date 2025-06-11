@@ -21,16 +21,16 @@
 		},
 		{
 			"name": "cube inverted",
-			"from": [16, 16, 16],
-			"to": [0, 14, 0],
+			"from": [15, 16, 15],
+			"to": [1, 14, 1],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 16, 0]},
 			"faces": {
 				"north": {"uv": [7, 0, 8, 8], "rotation": 90, "texture": "#1"},
 				"east": {"uv": [7, 0, 8, 8], "rotation": 90, "texture": "#1"},
 				"south": {"uv": [7, 0, 8, 8], "rotation": 90, "texture": "#1"},
 				"west": {"uv": [7, 0, 8, 8], "rotation": 90, "texture": "#1"},
-				"up": {"uv": [8, 8, 16, 0], "texture": "#1"},
-				"down": {"uv": [8, 16, 16, 8], "texture": "#1"}
+				"up": {"uv": [8.5, 7.5, 15.5, 0.5], "texture": "#1"},
+				"down": {"uv": [8.5, 15.5, 15.5, 8.5], "texture": "#1"}
 			}
 		},
 		{
