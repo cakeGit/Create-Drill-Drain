@@ -1,9 +1,9 @@
 # TODO
-[ ] Connection integrity validation (check adjacent)
+[x] Connection integrity validation (check adjacent)
 
-[ ] Connection priority
+[x] Connection priority
 
-[ ] PONDERS
+[x] PONDERS
 
 [ ] Recipe
 
@@ -12,3 +12,5 @@
 [1.5/2] Logo and assets
 
 [ ] Documentation and description
+
+[X] CONFIG

@@ -1,5 +1,6 @@
 package com.cake.drill_drain.content.replacements;
 
+import com.cake.drill_drain.Config;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.render.ActorVisual;
 import com.simibubi.create.content.kinetics.drill.DrillMovementBehaviour;
@@ -31,12 +32,15 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
                 return;
             }
 
-            int simulatedFill = context.contraption.getStorage().getFluids().fill(currentState, IFluidHandler.FluidAction.SIMULATE);
-            if (simulatedFill < currentState.getAmount()) {
-                return;
+            if (Config.fluidPickupModifier != 0) {
+                int simulatedFill = context.contraption.getStorage().getFluids().fill(currentState, IFluidHandler.FluidAction.SIMULATE);
+                if (simulatedFill < currentState.getAmount()) {
+                    return;
+                }
+
+                context.contraption.getStorage().getFluids().fill(currentState, IFluidHandler.FluidAction.EXECUTE);
             }
 
-            context.contraption.getStorage().getFluids().fill(currentState, IFluidHandler.FluidAction.EXECUTE);
             getFluidFromFluidBlock(context, pos, false);
             context.world.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 0.1f, 1.0F);
         }
@@ -58,7 +62,7 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
         if (fluidState.isEmpty() || !fluidState.isSource())
             return empty;
 
-        FluidStack stack = new FluidStack(fluidState.getType(), 100);
+        FluidStack stack = new FluidStack(fluidState.getType(), (int) (1000 * Config.fluidPickupModifier));
 
         if (simulate)
             return stack;
