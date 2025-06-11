@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
 import static com.cake.drill_drain.CreateDrillDrain.REGISTRATE;
+import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 
 public class DDRegistry {
@@ -27,10 +28,11 @@ public class DDRegistry {
         .properties(p -> p.sound(SoundType.WOOD)
             .mapColor(MapColor.DIRT))
         .properties(BlockBehaviour.Properties::noOcclusion)
-        .blockstate(BlockStateGen.directionalBlockProvider(false))
+        .blockstate(BlockStateGen.directionalBlockProviderIgnoresWaterlogged(true))
         .transform(axeOrPickaxe())
-        .simpleItem()
         .addLayer(() -> RenderType::cutoutMipped)
+        .item()
+        .transform(customItemModel())
         .register();
 
     public static final BlockEntityEntry<DrillDrainBlockEntity> DRILL_DRAIN_BLOCK_ENTITY = REGISTRATE

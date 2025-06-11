@@ -23,14 +23,20 @@ public class DrillActorVisualReplacement extends DrillActorVisual {
         BlockState state = context.state;
         facing = state.getValue(DrillBlock.FACING);
 
-        if (context.blockEntityData.contains("DrillDrainParent"))
-            drillDrainAttachment = instancerProvider.instancer(InstanceTypes.TRANSFORMED, Models.partial(DDPartialModels.DRILL_DRAIN_ATTACHMENT))
+        updateExistenceOfAttachment(context);
+    }
+
+    private void updateExistenceOfAttachment(MovementContext context) {
+        if (context.blockEntityData.contains("DrillDrainParent") && !context.data.getBoolean("Disabled"))
+            drillDrainAttachment = drillDrainAttachment != null ? drillDrainAttachment : instancerProvider.instancer(InstanceTypes.TRANSFORMED, Models.partial(DDPartialModels.DRILL_DRAIN_ATTACHMENT))
                 .createInstance();
+        else drillDrainAttachment = null;
     }
 
     @Override
     public void tick() {
         super.tick();
+        updateExistenceOfAttachment(context);
     }
 
     @Override
@@ -48,7 +54,9 @@ public class DrillActorVisualReplacement extends DrillActorVisual {
 
     @Override
     protected void _delete() {
-        drillDrainAttachment.delete();
         super._delete();
+        if (drillDrainAttachment == null)
+            return;
+        drillDrainAttachment.delete();
     }
 }

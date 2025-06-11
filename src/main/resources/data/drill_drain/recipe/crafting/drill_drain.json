@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "create:mechanical_pump"
+    },
+    "A": {
+      "item": "create:fluid_pipe"
+    },
+    "B": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "pattern": [
+    "AAA",
+    "ABA",
+    " P "
+  ],
+  "result": {
+    "count": 1,
+    "id": "drill_drain:drill_drain"
+  }
+}

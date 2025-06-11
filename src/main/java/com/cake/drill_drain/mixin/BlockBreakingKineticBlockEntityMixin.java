@@ -16,7 +16,7 @@ public class BlockBreakingKineticBlockEntityMixin {
     @Inject(method = "write", at = @At("HEAD"))
     private void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
         if (this instanceof DrillBlockEntityMixinAccess drillBlockEntity) {
-            BlockPos parent = drillBlockEntity.create_Drill_Drain$getDrillDrainParent();
+            BlockPos parent = drillBlockEntity.create_Drill_Drain$getLocalDrillDrainParent();
             if (parent != null) {
                 compound.putLong("DrillDrainParent", parent.asLong());
             }

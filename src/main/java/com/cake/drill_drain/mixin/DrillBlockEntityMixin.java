@@ -25,12 +25,17 @@ public class DrillBlockEntityMixin extends BlockBreakingKineticBlockEntity imple
 
     @Override
     public BlockPos create_Drill_Drain$getDrillDrainParent() {
+        return create_Drill_Drain$drillDrainParent == null ? null : create_Drill_Drain$drillDrainParent.offset(getBlockPos());
+    }
+
+    @Override
+    public BlockPos create_Drill_Drain$getLocalDrillDrainParent() {
         return create_Drill_Drain$drillDrainParent;
     }
 
     @Override
     public void create_Drill_Drain$setDrillDrainParent(BlockPos drillDrainParents) {
-        create_Drill_Drain$drillDrainParent = drillDrainParents;
+        create_Drill_Drain$drillDrainParent = drillDrainParents == null ? null : drillDrainParents.subtract(getBlockPos());
         sendData();
     }
 

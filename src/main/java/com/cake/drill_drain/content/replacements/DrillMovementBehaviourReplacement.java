@@ -1,6 +1,7 @@
 package com.cake.drill_drain.content.replacements;
 
 import com.cake.drill_drain.Config;
+import com.cake.drill_drain.foundation.DDRegistry;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.render.ActorVisual;
 import com.simibubi.create.content.kinetics.drill.DrillMovementBehaviour;
@@ -11,6 +12,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -21,6 +23,19 @@ import javax.annotation.Nullable;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
 public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
+
+    @Override
+    public void startMoving(MovementContext context) {
+        super.startMoving(context);
+        if (context.blockEntityData.contains("DrillDrainParent")) {
+            StructureTemplate.StructureBlockInfo parentStructure =
+                context.contraption.getBlocks().get(context.localPos.offset(BlockPos.of(context.blockEntityData.getLong("DrillDrainParent"))));
+            if (parentStructure == null || !parentStructure.state().is(DDRegistry.DRILL_DRAIN)) {
+                context.blockEntityData.remove("DrillDrainParent");
+                context.data.putBoolean("Disabled", true);
+            }
+        }
+    }
 
     @Override
     public void visitNewPosition(MovementContext context, BlockPos pos) {

@@ -1,7 +1,9 @@
 package com.cake.drill_drain;
 
+import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
@@ -18,7 +20,9 @@ public class Config {
     public static double fluidPickupModifier;
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event) {
-        fluidPickupModifier = FLUID_PICKUP_MODIFIER.get();
+    static void onLoad(final ModConfigEvent.Loading event) {
+        if (event.getConfig().getSpec() == SPEC && event.getConfig().getType() == ModConfig.Type.SERVER) {
+            fluidPickupModifier = FLUID_PICKUP_MODIFIER.get();
+        }
     }
 }

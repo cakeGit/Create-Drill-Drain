@@ -1,6 +1,6 @@
 {
   "block.drill_drain.drill_drain": "Drill Drain",
-  "block.drill_drain.drill_drain.tooltip.summary": "Place behind a drill to be able to remove fluids from in front of the drill, may require space in the contraption to store the fluid (configurable)",
+  "block.drill_drain.drill_drain.tooltip.summary": "Place _behind an array of drills_ to be able to _remove fluids_ as the drill moves, _requires space in the contraption_ to store the fluid (configurable)",
   "drill_drain.ponder.drill_drain.header": "Using the Drill Drain",
   "drill_drain.ponder.drill_drain.text_1": "The Drill Drain can be placed behind a drill, it will connect to a range of blocks in front of it",
   "drill_drain.ponder.drill_drain.text_2": "Attached fluid tanks will fill with the fluid captured by the drill,",
