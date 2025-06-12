@@ -33,7 +33,7 @@ public abstract class BlockEntityBuilderMixin<T extends BlockEntity, P> extends 
     @Final
     private BlockEntityBuilder.BlockEntityFactory<T> factory;
 
-    public BlockEntityBuilderMixin(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, ResourceKey<? extends Registry<BlockEntityType<?>>> registryKey) {
+    public BlockEntityBuilderMixin(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, ResourceKey<Registry<BlockEntityType<?>>> registryKey) {
         super(owner, parent, name, callback, registryKey);
     }
 

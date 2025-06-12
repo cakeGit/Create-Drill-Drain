@@ -48,12 +48,12 @@ public class DrillDrainBlock extends DirectionalKineticBlock implements IBE<Dril
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return DDShapes.DRILL_DRAIN.get(state.getValue(DirectionalBlock.FACING));
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         Block newBlock = level.getBlockState(neighborPos).getBlock();
         if (newBlock instanceof DrillBlockMixinAccess access) {

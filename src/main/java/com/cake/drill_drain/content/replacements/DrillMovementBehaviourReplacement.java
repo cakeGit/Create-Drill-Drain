@@ -15,8 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 
@@ -30,7 +30,7 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
         if (context.blockEntityData.contains("DrillDrainParent")) {
             StructureTemplate.StructureBlockInfo parentStructure =
                 context.contraption.getBlocks().get(context.localPos.offset(BlockPos.of(context.blockEntityData.getLong("DrillDrainParent"))));
-            if (parentStructure == null || !parentStructure.state().is(DDRegistry.DRILL_DRAIN)) {
+            if (parentStructure == null || !parentStructure.state().is(DDRegistry.DRILL_DRAIN.get())) {
                 context.blockEntityData.remove("DrillDrainParent");
                 context.data.putBoolean("Disabled", true);
             }

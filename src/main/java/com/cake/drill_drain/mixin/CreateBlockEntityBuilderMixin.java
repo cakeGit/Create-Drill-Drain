@@ -24,6 +24,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.common.util.NonNullPredicate;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,10 +39,9 @@ import java.util.function.Predicate;
 @Mixin(remap = false, value = CreateBlockEntityBuilder.class)
 public abstract class CreateBlockEntityBuilderMixin<T extends BlockEntity, P> extends AbstractBuilder<BlockEntityType<?>, BlockEntityType<T>, P, BlockEntityBuilder<T, P>> {
 
-    @Shadow
-    public abstract CreateBlockEntityBuilder<T, P> visual(NonNullSupplier<SimpleBlockEntityVisualizer.Factory<T>> visualFactory, Predicate<@NotNull T> renderNormally);
+    @Shadow public abstract CreateBlockEntityBuilder<T, P> visual(NonNullSupplier<SimpleBlockEntityVisualizer.Factory<T>> visualFactory, NonNullPredicate<T> renderNormally);
 
-    public CreateBlockEntityBuilderMixin(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, ResourceKey<? extends Registry<BlockEntityType<?>>> registryKey) {
+    public CreateBlockEntityBuilderMixin(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, ResourceKey<Registry<BlockEntityType<?>>> registryKey) {
         super(owner, parent, name, callback, registryKey);
     }
 
@@ -49,7 +49,7 @@ public abstract class CreateBlockEntityBuilderMixin<T extends BlockEntity, P> ex
     @Inject(method = "visual(Lcom/tterrag/registrate/util/nullness/NonNullSupplier;Z)Lcom/simibubi/create/foundation/data/CreateBlockEntityBuilder;", at = @At("RETURN"))
     protected void renderSafe(NonNullSupplier<SimpleBlockEntityVisualizer.Factory<T>> visualFactory, boolean renderNormally, CallbackInfoReturnable<CreateBlockEntityBuilder<T, P>> cir) {
         if (this.getOwner().getModid().equals("create") && this.getName().equals("drill")) {
-            visual(() ->
+            this.visual(() ->
                     (context, blockEntity, partialTick) ->
                         (BlockEntityVisual<? super T>) new DrillVisualReplacement<>(context, (DrillBlockEntity) blockEntity, partialTick),
                 be -> renderNormally);

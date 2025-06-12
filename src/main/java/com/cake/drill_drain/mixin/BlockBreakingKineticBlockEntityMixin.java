@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BlockBreakingKineticBlockEntityMixin {
 
     @Inject(method = "write", at = @At("HEAD"))
-    private void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
+    private void write(CompoundTag compound, boolean clientPacket, CallbackInfo ci) {
         if (this instanceof DrillBlockEntityMixinAccess drillBlockEntity) {
             BlockPos parent = drillBlockEntity.create_Drill_Drain$getLocalDrillDrainParent();
             if (parent != null) {
@@ -24,7 +24,7 @@ public class BlockBreakingKineticBlockEntityMixin {
     }
 
     @Inject(method = "read", at = @At("HEAD"))
-    private void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
+    private void read(CompoundTag compound, boolean clientPacket, CallbackInfo ci) {
         if (this instanceof DrillBlockEntityMixinAccess drillBlockEntity) {
             if (compound.contains("DrillDrainParent")) {
                 BlockPos parent = BlockPos.of(compound.getLong("DrillDrainParent"));

@@ -10,7 +10,7 @@ import java.util.Map;
 public class DDTabInsertions {
     private static Map<Item, Item> INSERTS_AFTER = null;
     
-    public static final Map<ItemProviderEntry<?, ?>, ItemProviderEntry<?, ?>> REGISTRY_INSERTS_AFTER = Map.of(
+    public static final Map<ItemProviderEntry<?>, ItemProviderEntry<?>> REGISTRY_INSERTS_AFTER = Map.of(
         AllBlocks.MECHANICAL_PUMP, DDRegistry.DRILL_DRAIN
     );
     
@@ -20,7 +20,7 @@ public class DDTabInsertions {
         }
         
         INSERTS_AFTER = new HashMap<>();
-        for (Map.Entry<ItemProviderEntry<?, ?>, ItemProviderEntry<?, ?>> entry : REGISTRY_INSERTS_AFTER.entrySet()) {
+        for (Map.Entry<ItemProviderEntry<?>, ItemProviderEntry<?>> entry : REGISTRY_INSERTS_AFTER.entrySet()) {
             INSERTS_AFTER.put(entry.getKey().asItem(), entry.getValue().asItem());
         }
         return INSERTS_AFTER;

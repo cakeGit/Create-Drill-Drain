@@ -7,22 +7,28 @@ import com.simibubi.create.content.kinetics.drill.DrillMovementBehaviour;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(MovementBehaviour.class)
+@Mixin(value = MovementBehaviour.class, remap = false)
 public interface MovementBehaviourMixin {
     @Shadow
     SimpleRegistry<Block, MovementBehaviour> REGISTRY = SimpleRegistry.create();
 
-    @Inject(method = "movementBehaviour", at = @At("HEAD"), remap = false, cancellable = true)
-    private static <B extends Block> void movementBehaviour(MovementBehaviour behaviour, CallbackInfoReturnable<NonNullConsumer<? super B>> cir) {
+    /**
+     * @author Cakegit
+     * @reason cause i can??? (inject not allowed)
+     */
+    @Overwrite
+    static <B extends Block> NonNullConsumer<? super B> movementBehaviour(MovementBehaviour behaviour) {
         if (behaviour instanceof DrillMovementBehaviour) {
-            cir.setReturnValue(b -> REGISTRY.register(b, new DrillMovementBehaviourReplacement()));
-            cir.cancel();
+            return b -> REGISTRY.register(b, new DrillMovementBehaviourReplacement());
         }
+        return b -> REGISTRY.register(b, behaviour);
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Mixin(remap = false, targets = "com.simibubi.create.AllCreativeModeTabs$RegistrateDisplayItemsGenerator")
 public class CreateCreativeModeTabMixin {
 
-    @Inject(method = "makeVisibilityFunc", order = 600, at = @At(value = "RETURN"), cancellable = true)
+    @Inject(method = "makeVisibilityFunc", at = @At(value = "RETURN"), cancellable = true)
     private static void outputAll(CallbackInfoReturnable<Function<Item, CreativeModeTab.TabVisibility>> cir) {
         Function<Item, CreativeModeTab.TabVisibility> wrappedFunc = cir.getReturnValue();
         cir.setReturnValue((item) -> {
@@ -26,7 +26,7 @@ public class CreateCreativeModeTabMixin {
         });
     }
 
-    @Inject(method = "applyOrderings", order = 600, at = @At(value = "TAIL"))
+    @Inject(method = "applyOrderings", at = @At(value = "TAIL"))
     private static void outputAll(List<Item> items, List<?> orderings, CallbackInfo ci) {
         for (int i = 0; i < items.size(); i++) {
             if (DDTabInsertions.getAllInsertsAfter().containsKey(items.get(i))) {
