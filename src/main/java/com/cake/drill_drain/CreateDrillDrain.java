@@ -1,9 +1,13 @@
 package com.cake.drill_drain;
 
+import com.cake.drill_drain.accessor.SimpleRegistryImplMixinAccess;
+import com.cake.drill_drain.content.replacements.DrillMovementBehaviourReplacement;
 import com.cake.drill_drain.foundation.DDLangEntries;
 import com.cake.drill_drain.foundation.DDPartialModels;
 import com.cake.drill_drain.foundation.DDPonderPlugin;
 import com.cake.drill_drain.foundation.DDRegistry;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
@@ -12,9 +16,11 @@ import net.createmod.catnip.lang.FontHelper;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
@@ -44,8 +50,14 @@ public class CreateDrillDrain {
         DDLangEntries.addToLang();
         PonderIndex.addPlugin(new DDPonderPlugin());
         modEventBus.addListener(CreateDrillDrainData::gatherData);
+        modEventBus.addListener(this::afterRegister);
 
         context.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+    }
+
+    private void afterRegister(final FMLLoadCompleteEvent event) {
+        ((SimpleRegistryImplMixinAccess<Block, MovementBehaviour>) MovementBehaviour.REGISTRY)
+            .create_Drill_Drain$overrideRegister(AllBlocks.MECHANICAL_DRILL.get(), new DrillMovementBehaviourReplacement());
     }
 
     public static ResourceLocation asResource(String s) {
