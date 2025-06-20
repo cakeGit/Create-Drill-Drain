@@ -1,11 +1,11 @@
 package com.cake.drill_drain.mixin;
 
-import com.cake.drill_drain.content.replacements.DrillRendererReplacement;
 import com.cake.drill_drain.foundation.DDClientSideRenderers;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
+import com.tterrag.registrate.util.RegistrateDistExecutor;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
@@ -15,9 +15,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.api.distmarker.Dist;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,7 +44,7 @@ public abstract class BlockEntityBuilderMixin<T extends BlockEntity, P> extends 
     @Inject(method = "renderer", at = @At("RETURN"))
     protected void renderSafe(NonNullSupplier<NonNullFunction<BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>>> renderer, CallbackInfoReturnable<BlockEntityBuilder<T, P>> cir) {
         if (this.getOwner().getModid().equals("create") && this.getName().equals("drill")) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
+            RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
                 this.renderer = DDClientSideRenderers::drillRendererSafeIGuess);
         }
     }

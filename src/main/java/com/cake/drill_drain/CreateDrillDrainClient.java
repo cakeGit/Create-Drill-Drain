@@ -2,7 +2,7 @@ package com.cake.drill_drain;
 
 import com.cake.drill_drain.foundation.DDPonderPlugin;
 import net.createmod.ponder.foundation.PonderIndex;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class CreateDrillDrainClient {
 
