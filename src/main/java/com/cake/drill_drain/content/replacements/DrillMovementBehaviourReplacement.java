@@ -18,6 +18,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
@@ -61,13 +62,13 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
     private void tryCollectFluids(MovementContext context, BlockPos pos) {
         if (context.blockEntityData.contains("DrillDrainParent") && !context.world.isClientSide) {
             boolean consumePartialFluid = ModList.get().isLoaded("flowing_fluids");
-            FluidStack currentState = getFluidFromFluidBlock(context, pos, true, consumePartialFluid);
+            @Nullable FluidStack currentState = getFluidFromFluidBlock(context, pos, true, consumePartialFluid);
 
-            if (currentState.isEmpty()) {
+            if (currentState == null) {
                 return;
             }
 
-            if (Config.fluidPickupModifier != 0) {
+            if (Config.fluidPickupModifier != 0 && !currentState.isEmpty()) {
                 int simulatedFill = context.contraption.getStorage().getFluids().fill(currentState, IFluidHandler.FluidAction.SIMULATE);
                 if (simulatedFill < currentState.getAmount()) {
                     return;
@@ -81,23 +82,24 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
         }
     }
 
-    private FluidStack getFluidFromFluidBlock(MovementContext context, BlockPos pos, boolean simulate, boolean consumePartialFluid) {
-        FluidStack empty = FluidStack.EMPTY;
+    private @Nullable FluidStack getFluidFromFluidBlock(MovementContext context, BlockPos pos, boolean simulate, boolean consumePartialFluid) {
         if (context.world == null)
-            return empty;
+            return null;
         if (!context.world.isLoaded(pos))
-            return empty;
+            return null;
 
         BlockState state = context.world.getBlockState(pos);
         FluidState fluidState = state.getFluidState();
         boolean isWaterLoggableBlock = state.hasProperty(WATERLOGGED);
 
         if (!isWaterLoggableBlock && !state.canBeReplaced())
-            return empty;
-        if (fluidState.isEmpty() || (!consumePartialFluid && !fluidState.isSource()))
-            return empty;
+            return null;
+        if (fluidState.isEmpty())
+            return null;
 
-        FluidStack stack = new FluidStack(fluidState.getType(), (int) (fluidState.getAmount() * Config.fluidPickupModifier));
+        FluidStack stack = new FluidStack(fluidState.getType(), (int) (
+            !(consumePartialFluid && !fluidState.isSource()) ? 0 : fluidState.getAmount() * Config.fluidPickupModifier
+        ));
 
         if (simulate)
             return stack;
@@ -107,7 +109,7 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
             context.world.scheduleTick(pos, Fluids.WATER, 1);
         } else {
             context.world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-            context.world.scheduleTick(pos, fluidState.getType(), 1);
+            if (!fluidState.isEmpty()) context.world.scheduleTick(pos, fluidState.getType(), 1);
         }
 
         return stack;
