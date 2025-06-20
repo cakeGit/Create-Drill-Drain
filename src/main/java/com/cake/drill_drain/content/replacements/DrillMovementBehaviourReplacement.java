@@ -61,13 +61,13 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
     private void tryCollectFluids(MovementContext context, BlockPos pos) {
         if (context.blockEntityData.contains("DrillDrainParent") && !context.world.isClientSide) {
             boolean consumePartialFluid = ModList.get().isLoaded("flowing_fluids");
-            @Nullable FluidStack currentState = getFluidFromFluidBlock(context, pos, true, consumePartialFluid);
+            FluidStack currentState = getFluidFromFluidBlock(context, pos, true, consumePartialFluid);
 
-            if (currentState == null) {
+            if (currentState.isEmpty()) {
                 return;
             }
 
-            if (Config.fluidPickupModifier != 0 && !currentState.isEmpty()) {
+            if (Config.fluidPickupModifier != 0) {
                 int simulatedFill = context.contraption.getStorage().getFluids().fill(currentState, IFluidHandler.FluidAction.SIMULATE);
                 if (simulatedFill < currentState.getAmount()) {
                     return;
