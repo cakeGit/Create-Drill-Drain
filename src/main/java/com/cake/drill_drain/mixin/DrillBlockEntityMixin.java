@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 
-@Mixin(remap = false, value = DrillBlockEntity.class)
+@Mixin(value = DrillBlockEntity.class)
 public class DrillBlockEntityMixin extends BlockBreakingKineticBlockEntity implements DrillBlockEntityMixinAccess {
 
     @Unique @Nullable

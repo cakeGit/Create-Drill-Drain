@@ -4,7 +4,6 @@ import com.cake.drill_drain.accessor.SimpleRegistryImplMixinAccess;
 import com.cake.drill_drain.content.replacements.DrillMovementBehaviourReplacement;
 import com.cake.drill_drain.foundation.DDLangEntries;
 import com.cake.drill_drain.foundation.DDPartialModels;
-import com.cake.drill_drain.foundation.DDPonderPlugin;
 import com.cake.drill_drain.foundation.DDRegistry;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
@@ -13,7 +12,6 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import net.createmod.catnip.lang.FontHelper;
-import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -47,8 +45,8 @@ public class CreateDrillDrain {
 
         DDRegistry.init();
         DDPartialModels.init();
-        DDLangEntries.addToLang();
-        PonderIndex.addPlugin(new DDPonderPlugin());
+        DDLangEntries.addToLang();;
+        modEventBus.addListener(CreateDrillDrainClient::clientData);
         modEventBus.addListener(CreateDrillDrainData::gatherData);
         modEventBus.addListener(this::afterRegister);
 
