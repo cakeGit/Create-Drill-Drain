@@ -2,8 +2,8 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.cake.drill_drain.mixin",
-  "refmap": "${mod_id}.refmap.json",
-  "compatibilityLevel": "JAVA_21",
+  "refmap": "mixins.drill_drain.refmap.json",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockBreakingKineticBlockEntityMixin",
     "BlockEntityBuilderMixin",
@@ -11,7 +11,7 @@
     "CreateCreativeModeTabMixin",
     "DrillBlockEntityMixin",
     "DrillBlockMixin",
-    "MovementBehaviourMixin"
+    "SimpleRegistryImplMixin"
   ],
   "client": [
   ],

@@ -1,21 +1,20 @@
 package com.cake.drill_drain;
 
-import net.minecraft.client.Minecraft;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-@EventBusSubscriber(modid = CreateDrillDrain.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = CreateDrillDrain.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
-    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    public static final ModConfigSpec.DoubleValue FLUID_PICKUP_MODIFIER = BUILDER
+    public static final ForgeConfigSpec.DoubleValue FLUID_PICKUP_MODIFIER = BUILDER
         .comment("Controls how much the drill drains are able to collect (0.0 - 1.0)")
         .defineInRange("fluidPickupModifier", 0.1, 0.0, 1.0);
 
-    static final ModConfigSpec SPEC = BUILDER.build();
+    static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static double fluidPickupModifier;
 
