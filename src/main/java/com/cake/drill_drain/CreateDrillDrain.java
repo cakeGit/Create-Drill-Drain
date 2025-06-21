@@ -42,7 +42,6 @@ public class CreateDrillDrain {
         DDPartialModels.init();
         DDLangEntries.addToLang();
         eventBus.addListener(CreateDrillDrainClient::clientData);
-        PonderIndex.addPlugin(new DDPonderPlugin());
         eventBus.addListener(CreateDrillDrainData::gatherData);
 
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
