@@ -22,7 +22,7 @@ import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
 
@@ -61,19 +61,19 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
     private void tryCollectFluids(MovementContext context, BlockPos pos) {
         if (context.blockEntityData.contains("DrillDrainParent") && !context.world.isClientSide) {
             boolean consumePartialFluid = ModList.get().isLoaded("flowing_fluids");
-            @Nullable FluidStack currentState = getFluidFromFluidBlock(context, pos, true, consumePartialFluid);
+            @Nullable FluidStack currentStack = getFluidFromFluidBlock(context, pos, true, consumePartialFluid);
 
-            if (currentState == null) {
+            if (currentStack == null) {
                 return;
             }
 
-            if (Config.fluidPickupModifier != 0 && !currentState.isEmpty()) {
-                int simulatedFill = context.contraption.getStorage().getFluids().fill(currentState, IFluidHandler.FluidAction.SIMULATE);
-                if (simulatedFill < currentState.getAmount()) {
+            if (Config.fluidPickupModifier != 0 && !currentStack.isEmpty()) {
+                int simulatedFill = context.contraption.getStorage().getFluids().fill(currentStack, IFluidHandler.FluidAction.SIMULATE);
+                if (simulatedFill < currentStack.getAmount()) {
                     return;
                 }
 
-                context.contraption.getStorage().getFluids().fill(currentState, IFluidHandler.FluidAction.EXECUTE);
+                context.contraption.getStorage().getFluids().fill(currentStack, IFluidHandler.FluidAction.EXECUTE);
             }
 
             getFluidFromFluidBlock(context, pos, false, consumePartialFluid);
@@ -97,7 +97,8 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
             return null;
 
         FluidStack stack = new FluidStack(fluidState.getType(), (int) (
-            !(consumePartialFluid && !fluidState.isSource()) ? 0 : fluidState.getAmount() * Config.fluidPickupModifier
+            consumePartialFluid ? ((double) fluidState.getValue(LEVEL_FLOWING) / FluidState.AMOUNT_FULL) * fluidState.getFluidType().getDensity(fluidState, context.world, pos) * Config.fluidPickupModifier :
+                (fluidState.isSource() ? fluidState.getFluidType().getDensity(fluidState, context.world, pos) * Config.fluidPickupModifier : 0)
         ));
 
         if (simulate)
