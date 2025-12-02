@@ -1,0 +1,8 @@
+{
+  "block.drill_drain.drill_drain": "Bohrer Abfluss",
+  "block.drill_drain.drill_drain.tooltip.summary": "Platziere diesen Block _hinter einer Wand von Bohrern_ um _Flüssigkeiten zu entfernen_, wenn in Bewegung, es wird auf einer beweglichen Vorrichtung _Platz benötigt_, um Flüssigkeiten zu lagern (einstellbar).",
+  "drill_drain.ponder.drill_drain.header": "Den Bohrer Abfluss nutzen",
+  "drill_drain.ponder.drill_drain.text_1": "Der Bohrer Abfluss kann hinter einem Bohrer platziert werden, es wird sich mit einer gewissen menge an Bohrern verbinden.",
+  "drill_drain.ponder.drill_drain.text_2": "Verbundene Flüssigkeitstanks werden sich mit aufgenommenen Flüssigkeiten füllen,",
+  "drill_drain.ponder.drill_drain.text_3": "Auf der beweglichen Vorrichtung, muss für die Flüssigkeiten genug Platz vorhanden sein, ansonsten werden Flüssigkeiten nicht aufgenommen."
+}
