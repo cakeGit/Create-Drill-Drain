@@ -11,7 +11,8 @@
     "CreateCreativeModeTabMixin",
     "DrillBlockEntityMixin",
     "DrillBlockMixin",
-    "MovementBehaviourMixin"
+    "MovementBehaviourMixin",
+    "FlowingFluidTickMixin"
   ],
   "client": [
   ],

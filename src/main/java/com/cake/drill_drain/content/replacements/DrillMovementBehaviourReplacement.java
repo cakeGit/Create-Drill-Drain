@@ -1,6 +1,7 @@
 package com.cake.drill_drain.content.replacements;
 
 import com.cake.drill_drain.Config;
+import com.cake.drill_drain.FluidFlowSuppression;
 import com.cake.drill_drain.foundation.DDRegistry;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.render.ActorVisual;
@@ -10,6 +11,7 @@ import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -105,12 +107,15 @@ public class DrillMovementBehaviourReplacement extends DrillMovementBehaviour {
         if (simulate)
             return stack;
 
+        // Protect a small area around the drained block from new fluid placement.
+        // This is refreshed as the drill advances, so normal fluid behaviour resumes
+        // shortly after the drill has moved away.
+        FluidFlowSuppression.protectAround(context.world, pos, 2, 20);
+
         if (isWaterLoggableBlock) {
-            context.world.setBlock(pos, state.setValue(WATERLOGGED, false), 3);
-            context.world.scheduleTick(pos, Fluids.WATER, 1);
+            context.world.setBlock(pos, state.setValue(WATERLOGGED, false), Block.UPDATE_CLIENTS);
         } else {
-            context.world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-            if (!fluidState.isEmpty()) context.world.scheduleTick(pos, fluidState.getType(), 1);
+            context.world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
         }
 
         return stack;
